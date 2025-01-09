@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 interface ConnectorProps {
-  originId: string; // ID of the origin element
-  endId: string; // ID of the end element
+  originId: string; 
+  endId: string; 
   color?: string;
   strokeWidth?: number;
   className : string
@@ -15,40 +15,41 @@ const Connector: React.FC<ConnectorProps> = ({
   strokeWidth = 2,
   className
 }) => {
-  const [start, setStart] = useState({ x: 0, y: 0 });
-  const [end, setEnd] = useState({ x: 0, y: 0 });
+    const [path, setPath] = useState("");
 
-  useEffect(() => {
-    const updatePositions = () => {
-      const originElement = document.getElementById(originId);
-      const endElement = document.getElementById(endId);
-        console.log(originElement,endElement,originId,)
-      if (originElement && endElement) {
-        const originRect = originElement.getBoundingClientRect();
-        const endRect = endElement.getBoundingClientRect();
+    useEffect(() => {
+      const updatePath = () => {
+        const fromElement = document.getElementById(originId);
+        const toElement = document.getElementById(endId);
+  
+        if (fromElement && toElement) {
+          // Get bounding boxes
+          const fromRect = fromElement.getBoundingClientRect();
+          const toRect = toElement.getBoundingClientRect();
+        //   setFrom(fromRect);
+        //   endtoFrom(toRect)
 
-        setStart({
-          x: originRect.left + originRect.width / 2,
-          y: originRect.top + originRect.height / 2,
-        });
+          const fromX = fromRect.right; 
+          const fromY = fromRect.top + fromRect.height / 2;
+  
+          const toX = toRect.left;
+          const toY = toRect.top + toRect.height / 2;
+  
+          const pathData = `
+            M ${fromX} ${fromY} 
+            C ${fromX + 50} ${fromY}, ${toX - 50} ${toY}, ${toX} ${toY}
+          `;
+          setPath(pathData);
+        }
+      };
 
-        setEnd({
-          x: endRect.left + endRect.width / 2,
-          y: endRect.top + endRect.height / 2,
-        });
-      }
-    };
-
-    // Initial position calculation
-    updatePositions();
-
-    // Recalculate positions on window resize
-    window.addEventListener("resize", updatePositions);
-
-    return () => {
-      window.removeEventListener("resize", updatePositions);
-    };
-  }, [originId, endId]);
+      updatePath();
+      window.addEventListener("resize", updatePath);
+  
+      return () => {
+        window.removeEventListener("resize", updatePath);
+      };
+    }, [originId, endId]);
 
   return (
     <svg
@@ -62,11 +63,7 @@ const Connector: React.FC<ConnectorProps> = ({
       className={className}
     >
       <path
-        d={`M ${start.x} ${start.y} C ${
-          start.x + (end.x - start.x)
-        } ${start.y}, ${start.x + (end.x - start.x) } ${end.y}, ${end.x} ${
-          end.y
-        }`}
+        d={path}
         stroke={color}
         strokeWidth={strokeWidth}
         fill="none"
