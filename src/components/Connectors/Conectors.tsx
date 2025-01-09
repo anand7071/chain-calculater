@@ -1,65 +1,78 @@
 import React, { useEffect, useState } from "react";
 
-interface ConectorsProps {
-  fromId: string; // ID of the starting element
-  toId: string; 
+interface ConnectorProps {
+  originId: string; // ID of the origin element
+  endId: string; // ID of the end element
+  color?: string;
+  strokeWidth?: number;
+  className : string
 }
 
-const Conectors: React.FC<ConectorsProps> = ({ fromId, toId }) => {
-  const [path, setPath] = useState("");
+const Connector: React.FC<ConnectorProps> = ({
+  originId,
+  endId,
+  color = "blue",
+  strokeWidth = 2,
+  className
+}) => {
+  const [start, setStart] = useState({ x: 0, y: 0 });
+  const [end, setEnd] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const updatePath = () => {
-      // Get the DOM elements
-      const fromElement = document.getElementById(fromId);
-      const toElement = document.getElementById(toId);
+    const updatePositions = () => {
+      const originElement = document.getElementById(originId);
+      const endElement = document.getElementById(endId);
+        console.log(originElement,endElement,originId,)
+      if (originElement && endElement) {
+        const originRect = originElement.getBoundingClientRect();
+        const endRect = endElement.getBoundingClientRect();
 
-      if (fromElement && toElement) {
-        // Get bounding boxes
-        const fromRect = fromElement.getBoundingClientRect();
-        const toRect = toElement.getBoundingClientRect();
+        setStart({
+          x: originRect.left + originRect.width / 2,
+          y: originRect.top + originRect.height / 2,
+        });
 
-        // Calculate the start and end points
-        const fromX = fromRect.right; // Right edge of the "from" element
-        const fromY = fromRect.top + fromRect.height / 2; // Vertically centered
-
-        const toX = toRect.left; // Left edge of the "to" element
-        const toY = toRect.top + toRect.height / 2; // Vertically centered
-
-        // Create the path for the curve
-        const pathData = `
-          M ${fromX} ${fromY} 
-          C ${fromX + 50} ${fromY}, ${toX - 50} ${toY}, ${toX} ${toY}
-        `;
-        setPath(pathData);
+        setEnd({
+          x: endRect.left + endRect.width / 2,
+          y: endRect.top + endRect.height / 2,
+        });
       }
     };
 
-    // Update the path initially and on window resize
-    updatePath();
-    window.addEventListener("resize", updatePath);
+    // Initial position calculation
+    updatePositions();
 
-    // Cleanup the event listener
+    // Recalculate positions on window resize
+    window.addEventListener("resize", updatePositions);
+
     return () => {
-      window.removeEventListener("resize", updatePath);
+      window.removeEventListener("resize", updatePositions);
     };
-  }, [fromId, toId]);
+  }, [originId, endId]);
 
   return (
     <svg
       style={{
         position: "absolute",
         pointerEvents: "none",
-        zIndex: -1,
-        width: "100%",
-        height: "100%",
-        top: 0,
-        left: 0,
+        overflow: "visible",
+        top :0,
+        left : 0
       }}
+      className={className}
     >
-      <path d={path} stroke="blue" fill="none" strokeWidth={2} />
+      <path
+        d={`M ${start.x} ${start.y} C ${
+          start.x + (end.x - start.x)
+        } ${start.y}, ${start.x + (end.x - start.x) } ${end.y}, ${end.x} ${
+          end.y
+        }`}
+        stroke={color}
+        strokeWidth={strokeWidth}
+        fill="none"
+      />
     </svg>
   );
 };
 
-export default Conectors;
+export default Connector;

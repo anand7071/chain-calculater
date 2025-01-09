@@ -1,15 +1,18 @@
 import { SixDotIcon } from "../../asset/sixDotIcon";
 import { FunctionCardProps } from "../../type";
-import Conectors from "../Connectors/Conectors";
+import Connector from "../Connectors/Conectors";
 
 
 const RadioCircle = (props: { id: string }) => {
   return (
-    <div className="size-4 flex items-center justify-center rounded-full bg-gray-300" {...props}>
-      <div className="size-3 flex items-center justify-center rounded-full bg-white">
-        <div className="size-2 bg-blue-500 rounded-full"></div>
+    <div className="">
+      <div className="size-4 flex items-center justify-center rounded-full bg-gray-300" {...props}>
+        <div className="size-3 flex items-center justify-center rounded-full bg-white">
+          <div className="size-2 bg-blue-500 rounded-full"></div>
+        </div>
       </div>
-    </div>)
+    </div>
+  )
 }
 
 export const FunctionCard: React.FC<FunctionCardProps> = ({
@@ -39,8 +42,8 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
             className="text-lg p-1 w-16"
           />
           <div className="h-10 border border-yellow-100"></div>
-          <RadioCircle id="intialIput"/>
-          <Conectors fromId="intialInput" toId="inputId-1" />
+          <RadioCircle id="intialIput" />
+          {id === 1 && <Connector originId="intialIput" endId={"inputId-1"}  className=""/>}
         </div>
       </div>}
       <div className="border rounded-lg p-4 shadow-md w-64">
@@ -48,7 +51,7 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
           <SixDotIcon className="text-gray-300 size-5" />
           <div className="text-lg font-semibold">Function: {id}</div>
         </div>
-        <div className="mb-4" id={`inputId-${id}`}>
+        <div className="mb-4">
           <label htmlFor="equation" className="block text-sm font-medium text-gray-700">
             Equation
           </label>
@@ -82,20 +85,21 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
           <div className="flex items-center gap-2" >
             {/* <span className="text-sm text-gray-600">Output: {output}</span> */}
             <span className="text-sm text-gray-600">Output</span>
-            <RadioCircle id={`output-${id}`} />
+            <RadioCircle id={`outputId-${nextFunction}`} />
           </div>
         </div>
+        {nextFunction && <Connector originId={`outputId-${id}`} endId={`inputId-${nextFunction}`}  className=""/>}
       </div>
       {!nextFunction && <div className="absolute bottom-0 -right-32 w-28 flex flex-col">
         <div className="bg-green-500 text-zinc-100 rounded-md text-xs mb-2 p-2">
           Final Output y
         </div>
         <div className="flex gap-2 items-center border border-green-500 rounded-lg p-1 h-12 ">
-          <RadioCircle id="finalOutput"/>
+          <RadioCircle id="finalOutput" />
           <div className="h-11 border border-green-100"></div>
-        <div className="text-lg">{finalOutput}</div>
+          <div className="text-lg">{finalOutput}</div>
         </div>
-        
+        {!nextFunction && <Connector originId={`inputId-${id}`} endId={"finalOutput"}  className=""/>}
       </div>}
     </div>
   );
