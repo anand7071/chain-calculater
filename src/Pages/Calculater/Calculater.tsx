@@ -31,8 +31,8 @@ export const Calculater: React.FC = () => {
   }
 
   return (
-    <div className="relative flex justify-center items-center mb-20 mt-10" >
-      <div className="relative flex flex-wrap justify-center gap-4 text-sm items-center">
+    <div className="flex justify-center items-center mb-20 mt-10" >
+      <div className="flex flex-wrap justify-center gap-4 text-sm items-center">
         {equations.map((eq, idx) => (
           <FunctionCard
             key={idx}

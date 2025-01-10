@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 interface ConnectorProps {
   originId: string;
   targetId: string;
+  curvedValue? : number
 }
 
-const Connector: React.FC<ConnectorProps> = ({ originId, targetId }) => {
+const Connector: React.FC<ConnectorProps> = ({ originId, targetId,curvedValue= 40}) => {
   const [path, setPath] = useState("");
 
   useEffect(() => {
@@ -21,9 +22,9 @@ const Connector: React.FC<ConnectorProps> = ({ originId, targetId }) => {
         const endX = targetRect.left + window.scrollX + targetRect.width / 2;
         const endY = targetRect.top + window.scrollY + targetRect.height / 2;
         const controlX1 = startX;
-        const controlY1 = startY + 40; 
+        const controlY1 = startY + curvedValue; 
         const controlX2 = endX;
-        const controlY2 = endY - 40;
+        const controlY2 = endY - curvedValue;
         const pathData = `M ${startX},${startY} C ${controlX1},${controlY1} ${controlX2},${controlY2} ${endX},${endY}`;
         setPath(pathData);
       }
@@ -43,7 +44,7 @@ const Connector: React.FC<ConnectorProps> = ({ originId, targetId }) => {
   return (
     <svg
       className="absolute top-0 left-0 w-full h-full pointer-events-none z-50"
-      style={{ position: "fixed" }}
+      style={{ position: "absolute" }}
     >
       <path d={path} stroke="#ACCEF7" strokeWidth="5" fill="none" />
     </svg>
