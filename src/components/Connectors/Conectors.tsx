@@ -16,19 +16,14 @@ const Connector: React.FC<ConnectorProps> = ({ originId, targetId }) => {
       if (origin && target) {
         const originRect = origin.getBoundingClientRect();
         const targetRect = target.getBoundingClientRect();
-
         const startX = originRect.left + window.scrollX + originRect.width / 2;
         const startY = originRect.top + window.scrollY + originRect.height / 2;
-
         const endX = targetRect.left + window.scrollX + targetRect.width / 2;
         const endY = targetRect.top + window.scrollY + targetRect.height / 2;
-
         const controlX1 = startX;
         const controlY1 = startY + 40; 
         const controlX2 = endX;
         const controlY2 = endY - 40;
-
-        // Bezier curve path
         const pathData = `M ${startX},${startY} C ${controlX1},${controlY1} ${controlX2},${controlY2} ${endX},${endY}`;
         setPath(pathData);
       }
