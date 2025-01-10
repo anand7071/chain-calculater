@@ -6,7 +6,7 @@ interface ConnectorProps {
   curvedValue? : number
 }
 
-const Connector: React.FC<ConnectorProps> = ({ originId, targetId,curvedValue= 40}) => {
+const Connector: React.FC<ConnectorProps> = ({ originId, targetId,curvedValue= 50}) => {
   const [path, setPath] = useState("");
 
   useEffect(() => {

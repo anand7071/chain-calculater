@@ -6,7 +6,7 @@ export const Calculater: React.FC = () => {
   const [equations, setEquations] = useState<string[]>(['x^2', '2*x+4', 'x^2*20', 'x-2', 'x/2']);
   const [outputs, setOutputs] = useState<number[]>([0, 0, 0, 0, 0]);
 
-  const chainOrder = [2, 4, 5, 3, null];
+  const chainOrder = [2, 4, null, 5,3 ];
 
   const handleEquationChange = (id: number, equation: string) => {
     const updatedEquations = [...equations];
@@ -31,8 +31,8 @@ export const Calculater: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-center mb-20 mt-10" >
-      <div className="flex flex-wrap justify-center gap-4 text-sm items-center">
+    <div className="flex justify-center items-center m-20" >
+      <div className="flex flex-wrap justify-center gap-12 text-sm items-center">
         {equations.map((eq, idx) => (
           <FunctionCard
             key={idx}
