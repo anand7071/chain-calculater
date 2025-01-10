@@ -43,7 +43,7 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
           />
           <div className="h-10 border border-yellow-100"></div>
           <RadioCircle id="intialIput" />
-          {id === 1 && <Connector originId="intialIput" endId={"inputId-1"}  className=""/>}
+          {id === 1 && <Connector originId="intialIput" targetId={"inputId-1"} />}
         </div>
       </div>}
       <div className="border rounded-lg p-4 shadow-md w-64">
@@ -85,10 +85,10 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
           <div className="flex items-center gap-2" >
             {/* <span className="text-sm text-gray-600">Output: {output}</span> */}
             <span className="text-sm text-gray-600">Output</span>
-            <RadioCircle id={`outputId-${nextFunction}`} />
+            <RadioCircle id={`outputId-${id}`} />
           </div>
         </div>
-        {nextFunction && <Connector originId={`outputId-${id}`} endId={`inputId-${nextFunction}`}  className=""/>}
+        {nextFunction && <Connector originId={`outputId-${id}`} targetId={`inputId-${nextFunction}`}/>}
       </div>
       {!nextFunction && <div className="absolute bottom-0 -right-32 w-28 flex flex-col">
         <div className="bg-green-500 text-zinc-100 rounded-md text-xs mb-2 p-2">
@@ -99,7 +99,7 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
           <div className="h-11 border border-green-100"></div>
           <div className="text-lg">{finalOutput}</div>
         </div>
-        {!nextFunction && <Connector originId={`inputId-${id}`} endId={"finalOutput"}  className=""/>}
+        {!nextFunction && <Connector originId={`outputId-${id}`} targetId={"finalOutput"} />}
       </div>}
     </div>
   );

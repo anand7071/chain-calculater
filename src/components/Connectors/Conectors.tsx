@@ -1,75 +1,59 @@
 import React, { useEffect, useState } from "react";
 
 interface ConnectorProps {
-  originId: string; 
-  endId: string; 
-  color?: string;
-  strokeWidth?: number;
-  className : string
+  originId: string;
+  targetId: string;
 }
 
-const Connector: React.FC<ConnectorProps> = ({
-  originId,
-  endId,
-  color = "blue",
-  strokeWidth = 2,
-  className
-}) => {
-    const [path, setPath] = useState("");
+const Connector: React.FC<ConnectorProps> = ({ originId, targetId }) => {
+  const [path, setPath] = useState("");
 
-    useEffect(() => {
-      const updatePath = () => {
-        const fromElement = document.getElementById(originId);
-        const toElement = document.getElementById(endId);
-  
-        if (fromElement && toElement) {
-          // Get bounding boxes
-          const fromRect = fromElement.getBoundingClientRect();
-          const toRect = toElement.getBoundingClientRect();
-        //   setFrom(fromRect);
-        //   endtoFrom(toRect)
+  useEffect(() => {
+    const updatePath = () => {
+      const origin = document.getElementById(originId);
+      const target = document.getElementById(targetId);
 
-          const fromX = fromRect.right; 
-          const fromY = fromRect.top + fromRect.height / 2;
-  
-          const toX = toRect.left;
-          const toY = toRect.top + toRect.height / 2;
-  
-          const pathData = `
-            M ${fromX} ${fromY} 
-            C ${fromX + 50} ${fromY}, ${toX - 50} ${toY}, ${toX} ${toY}
-          `;
-          setPath(pathData);
-        }
-      };
+      if (origin && target) {
+        const originRect = origin.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
 
-      updatePath();
-      window.addEventListener("resize", updatePath);
-  
-      return () => {
-        window.removeEventListener("resize", updatePath);
-      };
-    }, [originId, endId]);
+        const startX = originRect.left + window.scrollX + originRect.width / 2;
+        const startY = originRect.top + window.scrollY + originRect.height / 2;
+
+        const endX = targetRect.left + window.scrollX + targetRect.width / 2;
+        const endY = targetRect.top + window.scrollY + targetRect.height / 2;
+
+        const controlX1 = startX;
+        const controlY1 = startY + 40; 
+        const controlX2 = endX;
+        const controlY2 = endY - 40;
+
+        // Bezier curve path
+        const pathData = `M ${startX},${startY} C ${controlX1},${controlY1} ${controlX2},${controlY2} ${endX},${endY}`;
+        setPath(pathData);
+      }
+    };
+
+    updatePath();
+
+    window.addEventListener("resize", updatePath);
+    window.addEventListener("scroll", updatePath);
+
+    return () => {
+      window.removeEventListener("resize", updatePath);
+      window.removeEventListener("scroll", updatePath);
+    };
+  }, [originId, targetId]);
 
   return (
     <svg
-      style={{
-        position: "absolute",
-        pointerEvents: "none",
-        overflow: "visible",
-        top :0,
-        left : 0
-      }}
-      className={className}
+      className="absolute top-0 left-0 w-full h-full pointer-events-none z-50"
+      style={{ position: "fixed" }}
     >
-      <path
-        d={path}
-        stroke={color}
-        strokeWidth={strokeWidth}
-        fill="none"
-      />
+      <path d={path} stroke="#ACCEF7" strokeWidth="5" fill="none" />
     </svg>
   );
 };
+
 
 export default Connector;
