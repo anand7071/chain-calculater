@@ -2,7 +2,7 @@ import { useState } from "react";
 import FunctionCard from "../../components/FunctionCard";
 
 export const Calculater: React.FC = () => {
-  const [initialInput, setInitialInput] = useState<number>(2);
+  const [initialInput, setInitialInput] = useState<number>(0);
   const [equations, setEquations] = useState<string[]>(['x^2', '2*x+4', 'x^2*20', 'x-2', 'x/2']);
   const [outputs, setOutputs] = useState<number[]>([0, 0, 0, 0, 0]);
 
@@ -18,7 +18,8 @@ export const Calculater: React.FC = () => {
   const calculateOutputs = (input: number, eqs: string[]) => {
     const results = [input];
     for (let i = 0; i < eqs.length; i++) {
-      const result = eval(eqs[i].replace(/x/g, results[i].toString()));
+      const formattedExpression = eqs[i].replace(/\^/g, '**');
+      const result = eval(formattedExpression.replace(/x/g, results[i].toString()));
       results.push(result);
     }
     setOutputs(results.slice(1));
