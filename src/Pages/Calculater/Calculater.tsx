@@ -15,14 +15,18 @@ export const Calculater: React.FC = () => {
     calculateOutputs(initialInput, updatedEquations);
   };
 
-  const calculateOutputs = (input: number, eqs: string[]) => {
-    const results = [input];
+  const calculateOutputs = (input: number, eq: string[]) => {
+    console.log(eq)
+    const results = [];
+    let out = input
+    const eqs = ['x^2', '2*x+4','x-2', 'x/2','x^2*20']
     for (let i = 0; i < eqs.length; i++) {
       const formattedExpression = eqs[i].replace(/\^/g, '**');
-      const result = eval(formattedExpression.replace(/x/g, results[i].toString()));
+      const result = eval(formattedExpression.replace(/x/g, out.toString()));
+      out = result
       results.push(result);
     }
-    setOutputs(results.slice(1));
+    setOutputs(results);
   };
 
   const onChangeInput = (e : React.ChangeEvent<HTMLInputElement>)=>{

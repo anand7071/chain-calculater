@@ -18,7 +18,7 @@ const RadioCircle = (props: { id: string }) => {
 export const FunctionCard: React.FC<FunctionCardProps> = ({
   id,
   equation,
-  output,
+  // output,
   nextFunction,
   onEquationChange,
   initialInput,
@@ -28,7 +28,7 @@ export const FunctionCard: React.FC<FunctionCardProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEquationChange(id, e.target.value);
   };
-  console.log(output, id)
+  // console.log(output, id)
   return (
     <div>
       <div className="relative flex-2">
